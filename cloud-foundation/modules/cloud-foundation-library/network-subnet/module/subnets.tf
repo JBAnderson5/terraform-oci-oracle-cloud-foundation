@@ -54,6 +54,15 @@ output "subnet_cidr" {
   value = oci_core_subnet.this.cidr_block
 }
 
+output "subnet_info" {
+  value = {
+    name = oci_core_subnet.this.display_name,
+    ocid = oci_core_subnet.this.id,
+    cidr = oci_core_subnet.this.cidr_block,
+    private = oci_core_subnet.this.prohibit_public_ip_on_vnic,
+  }
+}
+
 # logic
 
 locals {
