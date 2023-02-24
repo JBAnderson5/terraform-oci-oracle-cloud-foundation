@@ -98,6 +98,11 @@ output "internet_gateway" {
   description = "ocid of created IGW"
 }
 
+output "name" {
+  value = oci_core_vcn.this.display_name
+ 
+}
+
 
 # locals
 
