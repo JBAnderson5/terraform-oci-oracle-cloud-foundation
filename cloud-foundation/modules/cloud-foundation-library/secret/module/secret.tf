@@ -50,11 +50,13 @@ variable "AES_key_length" {
 
 # secret vars
 variable "secrets" {
-  type = map(object({
+  type = any
+  # TODO: change old type to a validation condition, because apparently this is the only way to support partially defined objects with dynamic fields
+  /*map(object({
         contents  = any,
         description = string,
         #metadata = ?, # TODO: support metadata key-value pairs
-  }))
+  }))*/ 
   default = {}
   description = "a map of secret. name will be object key. contents will be jsonencoded and base64encoded and accepts and valid TF variable type. However, contents will need to be of the same type"
 }
