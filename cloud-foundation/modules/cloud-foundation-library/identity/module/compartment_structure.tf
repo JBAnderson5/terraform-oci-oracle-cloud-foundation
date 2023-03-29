@@ -37,7 +37,7 @@ variable "allow_compartment_deletion" {
   description = "if true, allows terraform to delete compartments on a destroy command. if false, the compartment will not be deleted, but will be removed from tfstate file."
 }
 
-variable "with_identity_domains" {
+variable "with_identity_domains" { # TODO: I don't think this variable is actually used
   type = bool 
   default = false 
   description = "deployment will differ based on whether or not your tenancy uses Oracle Cloud Infrastructure Identity and Access Management (IAM) with identity domains"
