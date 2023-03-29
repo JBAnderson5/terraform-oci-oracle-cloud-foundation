@@ -3,8 +3,8 @@
 
 ## <a name="Solutions"></a>Overview
 For the moment we have implemented the following solutions:
-- Departmental data warehousing Full Solution
-- Departmental data warehousing Small Footprint Solution
+- Data platform - departmental data warehouse for line of business (LOB)
+- Data platform - data warehouse with e-business integration
 - Weblogic Clustered Deployment Solution
 - Hello-WebServer
 - GoldenGate Stream Analytics for production workloads Full Solution
@@ -13,9 +13,10 @@ For the moment we have implemented the following solutions:
 - Machine learning platform on Autonomous Data Warehouse
 - Modern data warehousing a polyglot integration example
 - Cloud data lake house - process enterprise and streaming data for analysis and machine learning
-- Departmental data warehousing an EBS integration example
 - ATP Deployment
 - OCI-Observability-Solution-Level1
 - OCI-Observability-Solution-Level2
 - OCI-Observability-Hybrid-Configurations-monitoring-on-prem-DBs-from-the-cloud
 - S3_tfstate_backend_cloud_foundation_automation
+- Oracle-MovieStream
+- MovieStream_live_lab
