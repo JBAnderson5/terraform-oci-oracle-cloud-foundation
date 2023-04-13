@@ -28,7 +28,7 @@ resource "oci_identity_group" "auditor" {
   count          = var.create_auditor_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for auditing the tenancy."
-  name           = "auditor_group"
+  name           = "auditor-User"
 
 }
 

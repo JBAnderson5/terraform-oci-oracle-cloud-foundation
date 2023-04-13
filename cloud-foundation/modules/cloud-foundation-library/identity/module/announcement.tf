@@ -28,7 +28,7 @@ resource "oci_identity_group" "announcement" {
   count          = var.create_announcement_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for reading Console announcements."
-  name           = "announcement_group"
+  name           = "announcement-User"
 
 }
 

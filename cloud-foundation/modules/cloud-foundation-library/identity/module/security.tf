@@ -51,14 +51,14 @@ resource "oci_identity_group" "security" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zome group for managing security services in compartment ${oci_identity_compartment.security[0].name}."
-  name           = "${local.security_name}-Admin"
+  name           = "${local.security_name}-Administrator"
 }
 
 resource "oci_identity_group" "security_service" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for users of the Security team to access security resources in compartment ${oci_identity_compartment.security[0].name}."
-  name           = "${local.security_name}-Service"
+  name           = "${local.security_name}-User"
 }
 
 resource "oci_identity_policy" "tenancy_security" {

@@ -60,7 +60,7 @@ output "application_group" {
 }
 
 output "application_environment_groups" {
-    value = {for group in oci_identity_group.environments: group.name => group.id}
+    value = { for environment in local.environment_names : environment => oci_identity_group.environments[environment].id }
     description = "map of application environment groups ocid with environment name as key and ocid as value"
 }
 
@@ -126,7 +126,7 @@ resource "oci_identity_group" "application" {
     count = var.create_application_persona ? 1 : 0
     compartment_id = var.tenancy_ocid
     description = "Landing Zone group for managing app development related services in compartment ${oci_identity_compartment.application[0].name}."
-    name = local.application_name
+    name = "${local.application_name}-Administrators"
 
 }
 
@@ -150,7 +150,7 @@ resource "oci_identity_group" "environments" {
 
     compartment_id = var.tenancy_ocid
     description = "group for ${each.key} admins"
-    name = each.key
+    name = "${each.key}-Administrators"
   
 }
 

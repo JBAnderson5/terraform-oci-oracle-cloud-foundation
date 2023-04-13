@@ -53,14 +53,14 @@ resource "oci_identity_group" "network" {
   count          = var.create_network_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for managing networking in compartment ${oci_identity_compartment.network[0].name}."
-  name           = "${local.network_name}-Admin"
+  name           = "${local.network_name}-Administrator"
 }
 
 resource "oci_identity_group" "network_service" {
   count          = var.create_network_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for users of the Networking team to access networks in compartment ${oci_identity_compartment.network[0].name}."
-  name           = "${local.network_name}-Service"
+  name           = "${local.network_name}-User"
 }
 
 resource "oci_identity_policy" "network" {

@@ -34,14 +34,24 @@ resource "oci_identity_group" "iam" {
   count          = var.create_identity_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for managing IAM resources minus users in the tenancy."
-  name           = "iam"
+  name           = "IAM-Administrator"
+}
+
+# cred
+# uses root as compartment
+
+resource "oci_identity_group" "cred" {
+  count          = var.create_identity_persona ? 1 : 0
+  compartment_id = var.tenancy_ocid
+  description    = "Landing Zone group for managing iam users credentials in the tenancy."
+  name           = "Credential-Administrator"
 }
 
 resource "oci_identity_policy" "iam" {
   count          = var.create_identity_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "${oci_identity_group.iam[0].name}'s policy"
-  name           = "iam"
+  description    = "${oci_identity_group.iam[0].name}'s and ${oci_identity_group.cred[0].name}'s policy"
+  name           = "Identity"
   statements = concat(
     formatlist("allow group ${oci_identity_group.iam[0].name} to %s in tenancy", [
       # inspect
@@ -57,26 +67,8 @@ resource "oci_identity_policy" "iam" {
     ]),
     ["allow group ${oci_identity_group.iam[0].name} to manage groups in tenancy where all {target.group.name != 'Administrators', target.group.name != '${oci_identity_group.cred[0].name}'}",
       "allow group ${oci_identity_group.iam[0].name} to manage identity-providers in tenancy where any {request.operation = 'AddIdpGroupMapping', request.operation = 'DeleteIdpGroupMapping'}",
-    ]
-  )
-}
+    ],
 
-# cred
-# uses root as compartment
-
-resource "oci_identity_group" "cred" {
-  count          = var.create_identity_persona ? 1 : 0
-  compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for managing iam users credentials in the tenancy."
-  name           = "cred"
-}
-
-resource "oci_identity_policy" "cred" {
-  count          = var.create_identity_persona ? 1 : 0
-  compartment_id = var.tenancy_ocid
-  description    = "${oci_identity_group.cred[0].name}'s policy"
-  name           = "cred"
-  statements = concat(
     formatlist("Allow group ${oci_identity_group.cred[0].name} to %s in tenancy", [
       # inspect
       "inspect users", "inspect groups",
@@ -86,3 +78,4 @@ resource "oci_identity_policy" "cred" {
     ["Allow group ${oci_identity_group.cred[0].name} to manage users in tenancy  where any {request.operation = 'ListApiKeys',request.operation = 'ListAuthTokens',request.operation = 'ListCustomerSecretKeys',request.operation = 'UploadApiKey',request.operation = 'DeleteApiKey',request.operation = 'UpdateAuthToken',request.operation = 'CreateAuthToken',request.operation = 'DeleteAuthToken',request.operation = 'CreateSecretKey',request.operation = 'UpdateCustomerSecretKey',request.operation = 'DeleteCustomerSecretKey',request.operation = 'UpdateUserCapabilities'}", ]
   )
 }
+

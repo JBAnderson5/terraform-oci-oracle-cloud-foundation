@@ -27,7 +27,7 @@ resource "oci_identity_group" "cost" {
   count          = var.create_cost_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
   description    = "Landing Zone group for Cost Management."
-  name           = "cost_group"
+  name           = "cost-User"
 
 }
 

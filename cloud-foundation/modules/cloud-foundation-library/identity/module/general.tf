@@ -7,7 +7,7 @@
 variable "create_general_persona" {
   type = bool 
   default = false 
-  description = "if true, creates a general-service group to grant certain read permissions across the tenancy. Always created at the tenancy level"
+  description = "if true, creates a general user policy to grant certain read permissions across the tenancy. Always created at the tenancy level"
 }
 
 /* expected defined values 
