@@ -126,7 +126,7 @@ resource "oci_identity_group" "application" {
     count = var.create_application_persona ? 1 : 0
     compartment_id = var.tenancy_ocid
     description = "Landing Zone group for managing app development related services in compartment ${oci_identity_compartment.application[0].name}."
-    name = "${local.application_name}-Administrators"
+    name = "${local.application_name}-Administrator"
 
 }
 
@@ -150,7 +150,7 @@ resource "oci_identity_group" "environments" {
 
     compartment_id = var.tenancy_ocid
     description = "group for ${each.key} admins"
-    name = "${each.key}-Administrators"
+    name = "${each.key}-Administrator"
   
 }
 
