@@ -27,15 +27,15 @@ var.tenancy_ocid - tenancy OCID
 resource "oci_identity_group" "auditor" {
   count          = var.create_auditor_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for auditing the tenancy."
-  name           = "auditor-User"
+  description    = "Group for auditing the tenancy."
+  name           = "auditor-Users"
 
 }
 
 resource "oci_identity_policy" "auditor" {
   count          = var.create_auditor_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone ${oci_identity_group.auditor[0].name}'s root compartment policy."
+  description    = "${oci_identity_group.auditor[0].name}'s root compartment policy."
   name           = "auditor_policy"
   statements = concat(
     #tenancy-wide

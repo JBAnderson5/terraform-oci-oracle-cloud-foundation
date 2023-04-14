@@ -74,7 +74,7 @@ locals {
 resource "oci_identity_compartment" "enclosing" {
   count = var.enclosing_compartment_name != null ? 1 : 0
   compartment_id = local.existing_compartment
-  description    = "Enclosing Landing Zone compartment for ${var.enclosing_compartment_name}"
+  description    = "Enclosing compartment for ${var.enclosing_compartment_name}"
   name           = "${local.prefix}${var.enclosing_compartment_name}"
   enable_delete  = var.allow_compartment_deletion
 }

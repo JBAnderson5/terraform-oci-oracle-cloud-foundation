@@ -117,7 +117,7 @@ locals {
 resource "oci_identity_compartment" "application" {
     count = var.create_application_persona ? 1 : 0
     compartment_id = local.enclosing_compartment
-    description = "Landing Zone compartment for all resources related to application development: compute instances, storage, functions, OKE, API Gateway, streaming, and others."
+    description = "Compartment for all resources related to application development: compute instances, storage, functions, OKE, API Gateway, streaming, and others."
     name = local.application_name
     enable_delete = var.allow_compartment_deletion
 }
@@ -125,8 +125,8 @@ resource "oci_identity_compartment" "application" {
 resource "oci_identity_group" "application" {
     count = var.create_application_persona ? 1 : 0
     compartment_id = var.tenancy_ocid
-    description = "Landing Zone group for managing app development related services in compartment ${oci_identity_compartment.application[0].name}."
-    name = "${local.application_name}-Administrator"
+    description = "Group for managing app development related services in compartment ${oci_identity_compartment.application[0].name}."
+    name = "${local.application_name}-Administrators"
 
 }
 
@@ -149,8 +149,8 @@ resource "oci_identity_group" "environments" {
     for_each =  toset(local.environment_names)
 
     compartment_id = var.tenancy_ocid
-    description = "group for ${each.key} admins"
-    name = "${each.key}-Administrator"
+    description = "group for ${each.key} administrators"
+    name = "${each.key}-Administrators"
   
 }
 

@@ -7,7 +7,7 @@
 variable "create_security_persona" {
   type        = bool
   default     = false
-  description = "if true, creates a Security-Admins group to manage Security resources in a specific compartment and some tenancy-level resources. It also creates a Security-Service group"
+  description = "if true, creates a Security-Administrators group to manage Security resources in a specific compartment and some tenancy-level resources. It also creates a Security-Users group"
 }
 
 variable "security_name" {
@@ -42,7 +42,7 @@ locals {
 resource "oci_identity_compartment" "security" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = local.enclosing_compartment
-  description    = "Landing Zone compartment for all security related resources: vaults, topics, notifications, logging, scanning, and others."
+  description    = "Compartment for all security related resources: vaults, topics, notifications, logging, scanning, and others."
   name           = local.security_name
   enable_delete  = var.allow_compartment_deletion
 }
@@ -50,21 +50,21 @@ resource "oci_identity_compartment" "security" {
 resource "oci_identity_group" "security" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zome group for managing security services in compartment ${oci_identity_compartment.security[0].name}."
-  name           = "${local.security_name}-Administrator"
+  description    = "Group for managing security services in compartment ${oci_identity_compartment.security[0].name}."
+  name           = "${local.security_name}-Administrators"
 }
 
 resource "oci_identity_group" "security_service" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for users of the Security team to access security resources in compartment ${oci_identity_compartment.security[0].name}."
-  name           = "${local.security_name}-User"
+  description    = "Group for users of the Security team to access security resources in compartment ${oci_identity_compartment.security[0].name}."
+  name           = "${local.security_name}-Users"
 }
 
 resource "oci_identity_policy" "tenancy_security" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone policy for ${oci_identity_group.security[0].name}'s group to manage security related services in tenancy"
+  description    = "Policy for ${oci_identity_group.security[0].name}'s group to manage security related services in tenancy"
   name           = "${local.security_name}-tenancy"
   statements     = concat(
       #security team in tenancy
@@ -78,7 +78,7 @@ resource "oci_identity_policy" "tenancy_security" {
 resource "oci_identity_policy" "security" {
   count          = var.create_security_persona ? 1 : 0
   compartment_id = oci_identity_compartment.security[0].id
-  description    = "Landing Zone policy for ${oci_identity_group.security[0].name}'s group and ${oci_identity_group.security_service[0].name} to manage security related services in Landing Zone compartment ${oci_identity_compartment.security[0].name}."
+  description    = "Policy for ${oci_identity_group.security[0].name}'s group and ${oci_identity_group.security_service[0].name} to manage security related services in Landing Zone compartment ${oci_identity_compartment.security[0].name}."
   name           = local.security_name
   statements     = concat(
       # security team in security compartment

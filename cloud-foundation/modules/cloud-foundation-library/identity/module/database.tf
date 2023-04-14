@@ -53,21 +53,21 @@ resource "oci_identity_compartment" "database" {
 resource "oci_identity_group" "database" {
   count          = var.create_database_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for managing databases in compartment ${oci_identity_compartment.database[0].name}."
-  name           = "${local.database_name}-Administrator"
+  description    = "Group for managing databases in compartment ${oci_identity_compartment.database[0].name}."
+  name           = "${local.database_name}-Administrators"
 }
 
 resource "oci_identity_group" "database_service" {
   count          = var.create_database_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for users of the database team to access databases in comparment ${oci_identity_compartment.database[0].name}."
-  name           = "${local.database_name}-User"
+  description    = "Group for users of the database team to access databases in comparment ${oci_identity_compartment.database[0].name}."
+  name           = "${local.database_name}-Users"
 }
 
 resource "oci_identity_policy" "database" {
   count          = var.create_database_persona ? 1 : 0
   compartment_id = oci_identity_compartment.database[0].id
-  description    = "Landing Zone policy for ${oci_identity_group.database[0].name}'s group and ${oci_identity_group.database_service[0].name} to manage database related services in Landing Zone compartment ${oci_identity_compartment.database[0].name}."
+  description    = "Policy for ${oci_identity_group.database[0].name}'s group and ${oci_identity_group.database_service[0].name} to manage database related services in Landing Zone compartment ${oci_identity_compartment.database[0].name}."
   name           = local.database_name
   statements     = concat(
       # database team in database compartment

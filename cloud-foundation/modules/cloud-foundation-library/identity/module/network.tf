@@ -7,7 +7,7 @@
 variable "create_network_persona" {
   type        = bool
   default     = false
-  description = "if true, creates a Network-Admins group to manage Network resources in a specific compartment. It also creates a Network-Service group"
+  description = "if true, creates a Network-Administrators group to manage Network resources in a specific compartment. It also creates a Network-Users group"
 }
 variable "network_name" {
   type = string 
@@ -44,7 +44,7 @@ locals {
 resource "oci_identity_compartment" "network" {
   count          = var.create_network_persona ? 1 : 0
   compartment_id = local.enclosing_compartment
-  description    = "Landing Zone compartment for all network related resources: VCNs, subnets, network gateways, security lists, NSGs, load balancers, VNICs, and others."
+  description    = "Compartment for all network related resources: VCNs, subnets, network gateways, security lists, NSGs, load balancers, VNICs, and others."
   name           = local.network_name
   enable_delete  = var.allow_compartment_deletion
 }
@@ -52,21 +52,21 @@ resource "oci_identity_compartment" "network" {
 resource "oci_identity_group" "network" {
   count          = var.create_network_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for managing networking in compartment ${oci_identity_compartment.network[0].name}."
-  name           = "${local.network_name}-Administrator"
+  description    = "Group for managing networking in compartment ${oci_identity_compartment.network[0].name}."
+  name           = "${local.network_name}-Administrators"
 }
 
 resource "oci_identity_group" "network_service" {
   count          = var.create_network_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for users of the Networking team to access networks in compartment ${oci_identity_compartment.network[0].name}."
-  name           = "${local.network_name}-User"
+  description    = "Group for users of the Networking team to access networks in compartment ${oci_identity_compartment.network[0].name}."
+  name           = "${local.network_name}-Users"
 }
 
 resource "oci_identity_policy" "network" {
   count          = var.create_network_persona ? 1 : 0
   compartment_id = oci_identity_compartment.network[0].id
-  description    = "Landing Zone policy for ${oci_identity_group.network[0].name}'s group and ${oci_identity_group.network_service[0].name} to manage Network related services in Landing Zone compartment ${oci_identity_compartment.network[0].name}"
+  description    = "Policy for ${oci_identity_group.network[0].name}'s group and ${oci_identity_group.network_service[0].name} to manage Network related services in Landing Zone compartment ${oci_identity_compartment.network[0].name}"
   name           = local.network_name
   statements     = concat(
       # network team in network compartment

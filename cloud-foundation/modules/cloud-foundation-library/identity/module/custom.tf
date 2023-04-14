@@ -61,7 +61,7 @@ locals {
 resource "oci_identity_compartment" "custom" {
   count          = var.create_custom_persona && var.create_custom_compartment ? 1 : 0
   compartment_id = local.enclosing_compartment
-  description    = "Landing Zone compartment for all database related resources."
+  description    = "Custom Compartment" # TODO: make description an optional inpu variable
   name           = local.custom_persona_name
   enable_delete  = var.allow_compartment_deletion
 }
@@ -74,14 +74,14 @@ data "oci_identity_compartment" "enclosing" {
 resource "oci_identity_group" "custom" {
   count          = var.create_custom_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for managing databases in compartment ${local.custom_compartment_name}."
+  description    = "Group for managing databases in compartment ${local.custom_compartment_name}."
   name           = local.custom_persona_name
 }
 
 resource "oci_identity_policy" "custom" {
   count          = var.create_custom_persona ? 1 : 0
   compartment_id = oci_identity_compartment.custom[0].id
-  description    = "Landing Zone policy for ${oci_identity_group.custom[0].name}'s group  to manage a custom defined set of resources in Landing Zone compartment ${local.custom_compartment_name}."
+  description    = "Policy for ${oci_identity_group.custom[0].name}'s group  to manage a custom defined set of resources in Landing Zone compartment ${local.custom_compartment_name}."
   name           = local.custom_persona_name
   statements     = concat (
     formatlist("allow group ${oci_identity_group.custom[0].name} to %s in compartment ${local.custom_compartment_name}",

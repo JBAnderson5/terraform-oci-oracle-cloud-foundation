@@ -26,15 +26,15 @@ var.tenancy_ocid - tenancy OCID
 resource "oci_identity_group" "cost" {
   count          = var.create_cost_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for Cost Management."
-  name           = "cost-User"
+  description    = "Group for Cost Management."
+  name           = "cost-Users"
 
 }
 
 resource "oci_identity_policy" "cost_policy" {
   count          = var.create_cost_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone ${oci_identity_group.cost[0].name}'s root compartment policy."
+  description    = "${oci_identity_group.cost[0].name}'s root compartment policy."
   name           = "cost_policy"
   statements = ["define tenancy usage-report as ocid1.tenancy.oc1..aaaaaaaaned4fkpkisbwjlr56u7cj63lf3wffbilvqknstgtvzub7vhqkggq",
     "Allow group ${oci_identity_group.cost[0].name} to manage usage-report in tenancy",

@@ -33,8 +33,8 @@ var.allow_compartment_deletion - bool
 resource "oci_identity_group" "iam" {
   count          = var.create_identity_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for managing IAM resources minus users in the tenancy."
-  name           = "IAM-Administrator"
+  description    = "Group for managing IAM resources minus users in the tenancy."
+  name           = "IAM-Administrators"
 }
 
 # cred
@@ -43,8 +43,8 @@ resource "oci_identity_group" "iam" {
 resource "oci_identity_group" "cred" {
   count          = var.create_identity_persona ? 1 : 0
   compartment_id = var.tenancy_ocid
-  description    = "Landing Zone group for managing iam users credentials in the tenancy."
-  name           = "Credential-Administrator"
+  description    = "Group for managing iam users credentials in the tenancy."
+  name           = "Credential-Administrators"
 }
 
 resource "oci_identity_policy" "iam" {
