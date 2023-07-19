@@ -2,6 +2,10 @@
 # All rights reserved. Licensed under the Universal Permissive License (UPL), Version 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 
+# See devops policy reference for requirements/details: https://docs.oracle.com/en-us/iaas/Content/devops/using/devops_iampolicies.htm#devops_iam_policies
+# This file just covers the dynamic groups and policies applied to the application compartment. policy statements are also added to security, networking, and application files
+
+
 # inputs
 
 variable "enable_devops" {
