@@ -87,5 +87,10 @@ resource "oci_identity_policy" "network" {
         # File Storage Service
         "manage export-sets", "use mount-targets", "use file-systems"
       ]),
+
+      # devops service
+      var.enable_devops == true ? formatlist ("allow dynamic-group ${oci_identity_dynamic_group.devops_services[0].name} to %s in compartment ${oci_identity_compartment.network[0].name}",[
+        "use subnets", "use vnics", "use network-security-groups", "use dhcp-options"
+      ]) : [],
     )
 }

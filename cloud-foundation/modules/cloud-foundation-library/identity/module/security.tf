@@ -73,6 +73,12 @@ resource "oci_identity_policy" "tenancy_security" {
         "use cloud-shell", "read usage-budgets", "read usage-reports", "manage tag-namespaces", "manage tag-defaults",
         "manage repos", "read audit-events", "read app-catalog-listing", "read instance-images", "inspect buckets"
       ]),
+      
+      # devops service
+      var.enable_devops == true ? formatlist ("allow dynamic-group ${oci_identity_dynamic_group.devops_services[0].name} to %s in tenancy",[
+        "use adm-knowledge-bases", "manage adm-vulnerability-audits"
+      ]) : [],
+      
   )
 }
 resource "oci_identity_policy" "security" {
@@ -95,5 +101,13 @@ resource "oci_identity_policy" "security" {
         "read vss-family", "use bastion", "manage bastion-session", "use vaults", "use keys", 
         "manage secrets", "manage secret-versions", "read secret-bundles", "manage instance-images",
       ]),
+
+      # devops service
+      var.enable_devops == true ? concat(
+        formatlist ("allow dynamic-group ${oci_identity_dynamic_group.devops_services[0].name} to %s in compartment ${oci_identity_compartment.security[0].name}",[
+        "use cabundles", "read secret-family"
+      ]), 
+      "allow dynamic-group ${oci_identity_dynamic_group.compute[0].name} to read secret-family in compartment ${oci_identity_compartment.security[0].name}"
+      ) : [],
     )
 }

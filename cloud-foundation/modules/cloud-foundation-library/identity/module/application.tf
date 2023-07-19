@@ -97,6 +97,9 @@ locals {
         # read 
         "read all-resources", "read audit-events", "read work-requests",  "read instance-agent-plugins"
     ] ),
+        var.enable_devops == true ? formatlist("allow group %%s to $s in compartment %%s", [
+            "manage devops-family"
+        ]) : [],
         
         formatlist ("allow group %%s to %s in compartment %%s", var.additional_application_policies) 
         
